@@ -6,6 +6,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnRelatorios = document.getElementById('btnRelatorios');
     const btnCalcularIRRF = document.getElementById('btnCalcularIRRF');
 
+    const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
+
+    if (!usuarioLogado && window.location.pathname !== '/cadastro.html' && window.location.pathname !== '/login.html') {
+        window.location.href = 'cadastro.html';
+    } else if (usuarioLogado && (window.location.pathname === '/cadastro.html' || window.location.pathname === '/login.html')) {
+        window.location.href = 'index.html';
+    }
+
     if (loginForm) {
         loginForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -46,7 +54,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    const usuarioLogado = JSON.parse(localStorage.getItem('usuarioLogado'));
     if (usuarioLogado) {
         document.getElementById('nomeUsuario').innerText = usuarioLogado.nome;
     }
@@ -196,6 +203,7 @@ document.addEventListener('DOMContentLoaded', function() {
             <p>Saldo: R$ ${saldo.toFixed(2)}</p>
         `;
     }
+
     if (btnCalcularIRRF) {
         btnCalcularIRRF.addEventListener('click', function() {
             document.getElementById('content').innerHTML = `
@@ -217,7 +225,8 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     }
-    
+
+
     function calcularIRRF() {
         const salario = parseFloat(document.getElementById('salario').value);
         const dependentes = parseInt(document.getElementById('dependentes').value);
@@ -231,19 +240,19 @@ document.addEventListener('DOMContentLoaded', function() {
             { limite: 4664.68, aliquota: 0.225, deducao: 636.13 },
             { limite: Infinity, aliquota: 0.275, deducao: 869.36 }
         ];
-
-        let baseCalculo = salario - (dependentes * deducaoDependente);
-
+        
+        let salarioBase = salario - (dependentes * deducaoDependente);
         let irrf = 0;
-        for (const faixa of faixas) {
-            if (baseCalculo <= faixa.limite) {
-                irrf = (baseCalculo * faixa.aliquota) - faixa.deducao;
+        
+        for (let faixa of faixas) {
+            if (salarioBase <= faixa.limite) {
+                irrf = (salarioBase * faixa.aliquota) - faixa.deducao;
                 break;
             }
         }
-
+        
         irrf = irrf < 0 ? 0 : irrf;
-
+        
         document.getElementById('resultadoIRRF').innerText = `O valor do IRRF é: R$ ${irrf.toFixed(2)}`;
     }
 });
