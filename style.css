@@ -141,3 +141,38 @@ footer {
     text-align: center;
     padding: 1rem 0;
 }
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    form {
+        padding: 15px;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav a {
+        padding: 10px;
+        width: 100%;
+        text-align: center;
+    }
+
+    table, th, td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .logout-container {
+        flex-direction: column;
+    }
+
+    #nomeUsuario {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+}
